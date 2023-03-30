@@ -6,15 +6,17 @@ TagManager:
   tags:
   - Floor
   - Enemy
+  - Item
+  - Point
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Unit
+  - Player
   - Water
   - UI
-  - 
-  - 
+  - Enemy
+  - PlayerDamaged
   - Platform
   - 
   - 
@@ -48,4 +50,7 @@ TagManager:
     locked: 0
   - name: Unit
     uniqueID: 3744515721
+    locked: 0
+  - name: Point
+    uniqueID: 3460052527
     locked: 0

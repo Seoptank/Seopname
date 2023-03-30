@@ -7,6 +7,7 @@ public class EnemyController : MonoBehaviour
     private Rigidbody2D rigid;
     private Animator ani;
     private SpriteRenderer renderer;
+    private BoxCollider2D boxCollider;
 
     public int nextMove;
 
@@ -15,46 +16,70 @@ public class EnemyController : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         renderer = GetComponent<SpriteRenderer>();
         ani = GetComponent<Animator>();
+        boxCollider = GetComponent<BoxCollider2D>();
 
         Invoke("Think", 3);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
+        //** 이동
         rigid.velocity = new Vector2(nextMove, rigid.velocity.y);
 
-
-        Vector2 frontVec = new Vector2(rigid.position.x + nextMove, rigid.position.y);
-        Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0));
-        //** 빔에 대한 정보
+        
+        //** Platform끝 확인
+        Vector2 frontVec = new Vector2(rigid.position.x + nextMove * 0.5f , rigid.position.y);// 방향
+        Debug.DrawRay(frontVec, Vector3.down, new Color(0, 1, 0));
         RaycastHit2D rayHit = Physics2D.Raycast(frontVec, Vector3.down, 1, LayerMask.GetMask("Platform"));
-
-        //** Ray맞으면 
         if (rayHit.collider == null)
         {
-            Debug.Log("경고!!");
+            nextMove *= -1;
+            CancelInvoke();
+            Invoke("Think", 3);
         }
-
-    }
-
-    void Think()
-    {
-        nextMove = Random.Range(-1, 2);
-
-        //** 애니메이션 재생
-        if (nextMove == 0)
-            ani.SetBool("IsWalk", false);
-        else
-            ani.SetBool("IsWalk", true);
-
-
-        //** 방향전환
+        //** 몬스터 방향 전환 
         if (nextMove > 0)
             renderer.flipX = true;
         else
             renderer.flipX = false;
 
-            Invoke("Think", 3); //**재귀함수
     }
 
+    void Think()
+    {
+        //** 다음 활동 설정
+        nextMove = Random.Range(-1, 2);
+
+
+        //** 애니메이션 재생
+        if (nextMove == 0)
+            ani.SetBool("IsWalk",false);
+        else
+            ani.SetBool("IsWalk",true);
+
+        Invoke("Think", 3); //**재귀함수
+    }
+
+    public void OnDamaged()
+    {
+        //Sprite Alpha
+        renderer.color = new Color(1, 1, 1, 0.4f);
+
+        //Sprite FlipY
+        renderer.flipY = true;
+
+        //Collider Disable
+        boxCollider.enabled = false;
+
+        //Die Effect Jump
+        rigid.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
+
+        //Destroy
+        Invoke("DeActive", 5);
+    }
+
+    void DeActive()
+    {
+        gameObject.SetActive(false);
+    }
 }

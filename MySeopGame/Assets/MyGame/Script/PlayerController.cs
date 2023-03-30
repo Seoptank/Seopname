@@ -8,6 +8,8 @@ using UnityEngine;
 //2. Enemy와 닿을 시 플레이어 점프 안됨
 public class PlayerController : MonoBehaviour
 {
+    public GameManager gameManager;
+
     private float speed;
     private float maxSpeed;
     private float jumpPower;
@@ -125,12 +127,78 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (other.gameObject.tag.Equals("Floor"))
+        if (collision.gameObject.tag=="Floor")
             isJump = false;
 
+        if (collision.gameObject.tag == "Enemy")
+        {
+            //** 어택
+            if(rigid.velocity.y < 0 && transform.position.y > collision.transform.position.y)
+                OnAttack(collision.transform);
+
+            //** 데미지
+            else    
+                OnDamaged(collision.transform.position);
+
+        }
 
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Item")
+        {
+            //Point
+
+            //Deactive Item
+            collision.gameObject.SetActive(false);
+        }
+        else if (collision.gameObject.tag == "Finish")
+        {
+            //NextStage
+        }
+    }
+
+    void OnDamaged(Vector2 targetPos)
+    {
+        //** 플레이어 레이어를 7번으로 바꿈
+        gameObject.layer = 7;
+
+        //** 플레이어 색깔 바꿈
+        playerRenderer.color = new Color(1, 1, 1, 0.4f);
+
+        //** 맞는 방향대로 튕겨짐
+        int dirc = transform.position.x - targetPos.x > 0 ? 1 : -1;
+        rigid.AddForce(new Vector2(dirc, 1)*7 , ForceMode2D.Impulse);
+
+        //** 애니메이션
+        animator.SetTrigger("Damaged");
+
+        Invoke("OffDamage", 2);
+    }
+
+    void OffDamage()
+    {
+        gameObject.layer = 3;
+        
+        playerRenderer.color = new Color(1, 1, 1, 1);
+
+    }
+
+    void OnAttack(Transform enemy)
+    {
+        //Point
+
+        //Reaction Force
+        rigid.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
+
+        //Enemy Die
+        EnemyController enemyController = enemy.GetComponent<EnemyController>();
+        enemyController.OnDamaged();
+    }
+
+    
 
 }
