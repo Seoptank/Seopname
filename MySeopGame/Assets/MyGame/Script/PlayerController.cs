@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//※ 문제점
+//1. 벽에 꾹 누르고 있으면 벽에 계속 머무름
+//2. Enemy와 닿을 시 플레이어 점프 안됨
 public class PlayerController : MonoBehaviour
 {
     private float speed;
@@ -125,8 +129,8 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.tag.Equals("Floor"))
             isJump = false;
+
+
     }
-
-
 
 }
