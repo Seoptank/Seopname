@@ -8,12 +8,11 @@ using UnityEngine;
 //2. Enemy와 닿을 시 플레이어 점프 안됨
 public class PlayerController : MonoBehaviour
 {
-    public GameManager gameManager;
+    public GameController gameController;
 
     private float speed;
     private float maxSpeed;
     private float jumpPower;
-
     private bool isJump;
 
     private Vector2 movement;
@@ -21,6 +20,8 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private SpriteRenderer playerRenderer;
     private Rigidbody2D rigid;
+    private CapsuleCollider2D capsul;
+    
 
 
     
@@ -32,6 +33,10 @@ public class PlayerController : MonoBehaviour
         playerRenderer = GetComponent<SpriteRenderer>();
 
         rigid = GetComponent<Rigidbody2D>();
+
+        capsul = GetComponent<CapsuleCollider2D>();
+
+
     }
 
     private void Start()
@@ -150,7 +155,25 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Item")
         {
+            print("충돌");
             //Point
+            //＃ Contains: 대상 문자열에 비교문이 있으면 true
+            bool coinB = collision.gameObject.name.Contains("CoinB");
+            bool coinS = collision.gameObject.name.Contains("CoinS");
+            bool coinG = collision.gameObject.name.Contains("CoinG");
+            bool jumpBooster = collision.gameObject.name.Contains("JumpBooster");
+
+            if (coinB)
+            {
+                gameController.stagePoint += 50;
+                print("코인 먹음!");
+            }
+            else if (coinS)
+                gameController.stagePoint += 100;
+            else if (coinG)
+                gameController.stagePoint += 300;
+            else if (jumpBooster)
+                jumpPower = 20.0f;
 
             //Deactive Item
             collision.gameObject.SetActive(false);
@@ -158,11 +181,30 @@ public class PlayerController : MonoBehaviour
         else if (collision.gameObject.tag == "Finish")
         {
             //NextStage
+            gameController.NextStage();
+            animator.SetTrigger("IsFinish");
         }
     }
 
+    void OnAttack(Transform enemy)
+    {
+        //Point
+        gameController.stagePoint += 100;
+
+        //Reaction Force
+        rigid.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
+
+        //Enemy Die
+        EnemyController enemyController = enemy.GetComponent<EnemyController>();
+        enemyController.OnDamaged();
+    }
+
+
     void OnDamaged(Vector2 targetPos)
     {
+        //HP Down
+        gameController.HpDown();
+
         //** 플레이어 레이어를 7번으로 바꿈
         gameObject.layer = 7;
 
@@ -187,18 +229,26 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void OnAttack(Transform enemy)
+    public void OnDie()
     {
-        //Point
+        //Sprite Alpha
+        playerRenderer.color = new Color(1, 1, 1, 0.4f);
 
-        //Reaction Force
+        //Sprite FlipY
+        playerRenderer.flipY = true;
+
+        //Collider Disable
+        capsul.enabled = false;
+
+        //Die Effect Jump
         rigid.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
-
-        //Enemy Die
-        EnemyController enemyController = enemy.GetComponent<EnemyController>();
-        enemyController.OnDamaged();
     }
 
-    
+    public void VelocityZero()
+    {
+        rigid.velocity = Vector2.zero;
+    }
+
+
 
 }

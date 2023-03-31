@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Item
   - Point
+  - Start
   layers:
   - Default
   - TransparentFX
@@ -53,4 +54,7 @@ TagManager:
     locked: 0
   - name: Point
     uniqueID: 3460052527
+    locked: 0
+  - name: Item
+    uniqueID: 2009900999
     locked: 0
