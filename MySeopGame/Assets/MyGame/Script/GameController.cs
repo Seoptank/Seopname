@@ -18,7 +18,7 @@ public class GameController : MonoBehaviour
     public Image[] hpUI;
     public Text pointUI;
     public Text stageUI;
-    public GameObject restatBtn;
+    public GameObject restartBtn;
 
     void Update()
     {
@@ -27,7 +27,8 @@ public class GameController : MonoBehaviour
 
     public void NextStage()
     {
-        if (stageIndex < stage.Length)
+        //Change Stage
+        if (stageIndex < stage.Length-1)
         {
             stage[stageIndex].SetActive(false);
             stageIndex++;
@@ -40,13 +41,14 @@ public class GameController : MonoBehaviour
         {
             //Game Clear
 
-            //Player Contol Lock
+            //Player Control Lock
             Time.timeScale = 0;
 
-            //Result UI
-            print("게임 클리어");
-
             //ReStart Button UI
+            Text btnText = restartBtn.GetComponentInChildren<Text>();
+            btnText.text = "Clear!";
+            restartBtn.SetActive(true);
+            ViewBtn();
 
         }
 
@@ -57,26 +59,26 @@ public class GameController : MonoBehaviour
 
     public void HpDown()
     {
-        if (hp > 0)
+        if (hp > 1)
         {
             hp--;
             hpUI[hp].color = new Color(1, 0, 0, 0.4f);
         }
-        else if (hp < 1)
+        else
         {
+            //All Health UI off
+            hpUI[0].color = new Color(1, 0, 0, 0.4f);
+
             //Player Die Effect
             player.OnDie();
+
 
             //Result UI
 
             //Retry Button UI
-            Text btnText = restatBtn.GetComponentInChildren<Text>();
-            btnText.text = "Game Clear!";
-            restatBtn.SetActive(true);
-
+            ViewBtn();
         }
-        else
-            return;
+        
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -94,12 +96,18 @@ public class GameController : MonoBehaviour
 
     void PlayerReposition()
     {
-        player.transform.position = new Vector3(-20, 1, 0);
+        player.transform.position = new Vector3(-20, 1, 0);//Player Start Position
         player.VelocityZero();
+    }
+    void ViewBtn()
+    {
+        restartBtn.SetActive(true);
     }
 
     public void Restart()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(0);
     }
+
 }

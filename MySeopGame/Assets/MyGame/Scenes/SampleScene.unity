@@ -323,8 +323,8 @@ Transform:
   - {fileID: 825174344}
   - {fileID: 949395407}
   - {fileID: 1329119499}
-  - {fileID: 284968494}
   - {fileID: 1095578086}
+  - {fileID: 284968494}
   - {fileID: 1769304068}
   - {fileID: 225350604}
   - {fileID: 934427454}
@@ -443,14 +443,16 @@ MonoBehaviour:
   stageIndex: 0
   hp: 3
   player: {fileID: 2001877636}
-  stage: []
+  stage:
+  - {fileID: 1950243686}
+  - {fileID: 530683409}
   hpUI:
   - {fileID: 1801113142}
   - {fileID: 1055553730}
   - {fileID: 1097059569}
   pointUI: {fileID: 166293527}
   stageUI: {fileID: 768915457}
-  restatBtn: {fileID: 450259027}
+  restartBtn: {fileID: 0}
 --- !u!61 &149484560
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -654,17 +656,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 252cd422e2b658e4781108b92f77cc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 0}
-  spriteRenderer: {fileID: 0}
-  sprite: {fileID: 0}
-  endPoint: 0
-  exitPoint: 0
-  Speed: 0.125
-  player: {fileID: 0}
-  playerController: {fileID: 0}
-  movement: {x: 0, y: 0, z: 0}
-  offset: {x: 0, y: 7.5, z: 0}
-  dis: 0
 --- !u!1 &207277290
 GameObject:
   m_ObjectHideFlags: 0
@@ -762,17 +753,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 252cd422e2b658e4781108b92f77cc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 0}
-  spriteRenderer: {fileID: 0}
-  sprite: {fileID: 0}
-  endPoint: 0
-  exitPoint: 0
-  Speed: 0.5
-  player: {fileID: 0}
-  playerController: {fileID: 0}
-  movement: {x: 0, y: 0, z: 0}
-  offset: {x: 0, y: 7.5, z: 0}
-  dis: 0
 --- !u!1001 &212082066
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1004,17 +984,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 252cd422e2b658e4781108b92f77cc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 0}
-  spriteRenderer: {fileID: 0}
-  sprite: {fileID: 0}
-  endPoint: 0
-  exitPoint: 0
-  Speed: 0.125
-  player: {fileID: 0}
-  playerController: {fileID: 0}
-  movement: {x: 0, y: 0, z: 0}
-  offset: {x: 0, y: 7.5, z: 0}
-  dis: 0
 --- !u!212 &393187559
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1142,7 +1111,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &450259028
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1927,17 +1896,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 252cd422e2b658e4781108b92f77cc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 0}
-  spriteRenderer: {fileID: 0}
-  sprite: {fileID: 0}
-  endPoint: 0
-  exitPoint: 0
-  Speed: 1
-  player: {fileID: 0}
-  playerController: {fileID: 0}
-  movement: {x: 0, y: 0, z: 0}
-  offset: {x: 0, y: 7.5, z: 0}
-  dis: 0
 --- !u!212 &812741124
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2303,17 +2261,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 252cd422e2b658e4781108b92f77cc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 0}
-  spriteRenderer: {fileID: 0}
-  sprite: {fileID: 0}
-  endPoint: 0
-  exitPoint: 0
-  Speed: 1
-  player: {fileID: 0}
-  playerController: {fileID: 0}
-  movement: {x: 0, y: 0, z: 0}
-  offset: {x: 0, y: 7.5, z: 0}
-  dis: 0
 --- !u!1001 &896418901
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2624,17 +2571,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 252cd422e2b658e4781108b92f77cc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 0}
-  spriteRenderer: {fileID: 0}
-  sprite: {fileID: 0}
-  endPoint: 0
-  exitPoint: 0
-  Speed: 0.125
-  player: {fileID: 0}
-  playerController: {fileID: 0}
-  movement: {x: 0, y: 0, z: 0}
-  offset: {x: 0, y: 7.5, z: 0}
-  dis: 0
 --- !u!212 &1178724286
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3388,17 +3324,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 252cd422e2b658e4781108b92f77cc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 0}
-  spriteRenderer: {fileID: 0}
-  sprite: {fileID: 0}
-  endPoint: 0
-  exitPoint: 0
-  Speed: 0.125
-  player: {fileID: 0}
-  playerController: {fileID: 0}
-  movement: {x: 0, y: 0, z: 0}
-  offset: {x: 0, y: 7.5, z: 0}
-  dis: 0
 --- !u!1001 &1556361753
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3557,17 +3482,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 252cd422e2b658e4781108b92f77cc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 0}
-  spriteRenderer: {fileID: 0}
-  sprite: {fileID: 0}
-  endPoint: 0
-  exitPoint: 0
-  Speed: 0.25
-  player: {fileID: 0}
-  playerController: {fileID: 0}
-  movement: {x: 0, y: 0, z: 0}
-  offset: {x: 0, y: 7.5, z: 0}
-  dis: 0
 --- !u!1 &1664851374
 GameObject:
   m_ObjectHideFlags: 0
@@ -4527,17 +4441,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 252cd422e2b658e4781108b92f77cc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 0}
-  spriteRenderer: {fileID: 0}
-  sprite: {fileID: 0}
-  endPoint: 0
-  exitPoint: 0
-  Speed: 0.25
-  player: {fileID: 0}
-  playerController: {fileID: 0}
-  movement: {x: 0, y: 0, z: 0}
-  offset: {x: 0, y: 7.5, z: 0}
-  dis: 0
 --- !u!212 &1791376621
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5341,17 +5244,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 252cd422e2b658e4781108b92f77cc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 0}
-  spriteRenderer: {fileID: 0}
-  sprite: {fileID: 0}
-  endPoint: 0
-  exitPoint: 0
-  Speed: 0.5
-  player: {fileID: 0}
-  playerController: {fileID: 0}
-  movement: {x: 0, y: 0, z: 0}
-  offset: {x: 0, y: 7.5, z: 0}
-  dis: 0
 --- !u!212 &2042900160
 SpriteRenderer:
   m_ObjectHideFlags: 0
