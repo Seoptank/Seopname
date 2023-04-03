@@ -21,10 +21,8 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer playerRenderer;
     private Rigidbody2D rigid;
     private CapsuleCollider2D capsul;
-    
+    public GameObject fxPrefab;
 
-
-    
 
     private void Awake()
     {
@@ -186,34 +184,53 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Item")
         {
-            print("충돌");
             //Point
             //＃ Contains: 대상 문자열에 비교문이 있으면 true
             bool coinB = collision.gameObject.name.Contains("CoinB");
             bool coinS = collision.gameObject.name.Contains("CoinS");
             bool coinG = collision.gameObject.name.Contains("CoinG");
-            bool jumpBooster = collision.gameObject.name.Contains("JumpBooster");
+            bool apple = collision.gameObject.name.Contains("Apple");
 
             if (coinB)
             {
                 gameController.stagePoint += 50;
                 print("코인 먹음!");
+                collision.gameObject.SetActive(false);
             }
             else if (coinS)
+            {
                 gameController.stagePoint += 100;
+                //Deactive Item
+                collision.gameObject.SetActive(false);
+            }
             else if (coinG)
+            {
                 gameController.stagePoint += 300;
-            else if (jumpBooster)
-                jumpPower = 20.0f;
+                //Deactive Item
+                collision.gameObject.SetActive(false);
+            }
+            else if (apple)
+            {
+                if(gameController.hp<3)
+                {
+                    gameController.hp ++;
+                    collision.gameObject.SetActive(false);
+                }
+                else if (gameController.hp >= 3)
+                {
+                    gameController.hp = 3;
+                    collision.gameObject.SetActive(true);
+                    print("먹을 수 없음");
+                }
 
-            //Deactive Item
-            collision.gameObject.SetActive(false);
+            }
+
+           
         }
-        else if (collision.gameObject.tag == "Finish")
+        else if (collision.gameObject.tag == "Point")
         {
             //NextStage
             gameController.NextStage();
-            animator.SetTrigger("IsFinish");
         }
     }
 
@@ -273,6 +290,7 @@ public class PlayerController : MonoBehaviour
 
         //Die Effect Jump
         rigid.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
+
     }
 
     public void VelocityZero()

@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour
     public int stagePoint;
     public int stageIndex;
     public int hp;
+    public static int maxHp = 3;
 
     public  PlayerController player;
     public GameObject[] stage;
@@ -23,6 +24,33 @@ public class GameController : MonoBehaviour
     void Update()
     {
         pointUI.text = (totalPoint + stagePoint).ToString();
+       
+        //hpUI ป๓ลย
+        if (hp == 0)
+        {
+            hpUI[0].color = new Color(1, 0, 0, 0.4f);
+            hpUI[1].color = new Color(1, 0, 0, 0.4f);
+            hpUI[2].color = new Color(1, 0, 0, 0.4f);
+        }
+        else if (hp == 1)
+        {
+            hpUI[0].color = new Color(1, 1, 1, 1);
+            hpUI[1].color = new Color(1, 0, 0, 0.4f);
+            hpUI[2].color = new Color(1, 0, 0, 0.4f);
+        }
+        else if (hp == 2)
+        {
+            hpUI[0].color = new Color(1, 1, 1, 1);
+            hpUI[1].color = new Color(1, 1, 1, 1);
+            hpUI[2].color = new Color(1, 0, 0, 0.4f);
+        }
+        else if (hp == 3)
+        {
+            hpUI[0].color = new Color(1, 1, 1, 1);
+            hpUI[1].color = new Color(1, 1, 1, 1);
+            hpUI[2].color = new Color(1, 1, 1, 1);
+        }
+
     }
 
     public void NextStage()
@@ -60,20 +88,11 @@ public class GameController : MonoBehaviour
     public void HpDown()
     {
         if (hp > 1)
-        {
             hp--;
-            hpUI[hp].color = new Color(1, 0, 0, 0.4f);
-        }
         else
         {
-            //All Health UI off
-            hpUI[0].color = new Color(1, 0, 0, 0.4f);
-
             //Player Die Effect
             player.OnDie();
-
-
-            //Result UI
 
             //Retry Button UI
             ViewBtn();
@@ -92,11 +111,24 @@ public class GameController : MonoBehaviour
             // HP Down
             HpDown();
         }
+
+        if (collision.gameObject.name == "Apple")
+        {
+            if (hp < maxHp)
+            {
+                hp++;
+            }
+            
+            else if (hp >= maxHp)
+            {
+                collision.gameObject.SetActive(true);
+            }
+        }
     }
 
     void PlayerReposition()
     {
-        player.transform.position = new Vector3(-20, 1, 0);//Player Start Position
+        player.transform.position = new Vector3(0, 0, 0);//Player Start Position
         player.VelocityZero();
     }
     void ViewBtn()
