@@ -117,25 +117,56 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            animator.SetBool("IsJump",true);
 
-            if (!isJump)
+            if (isJump == false)
             {
+                animator.SetBool("IsJump", true);
                 isJump = true;
                 rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
             }
             else
                 return;
         }
+
+        //if (!isJump)
+        //{
+        //    isJump = true;
+
+        //    if (jumpCount > 0)
+        //    {
+        //        if (Input.GetKeyDown(KeyCode.UpArrow))
+        //        {
+        //            rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+        //            animator.SetBool("IsJump", true);
+        //            jumpCount--;
+
+        //            //if (jumpCount == 1 && Input.GetKeyDown(KeyCode.UpArrow))
+        //            //{
+        //            //    jumpCount--;
+        //            //    rigid.AddForce(new Vector3(0, 1 * jumpPower, 0), ForceMode2D.Impulse);
+        //            //    animator.SetBool("DubleJump", true);
+        //            //}
+        //        }
+        //    }
+        //    else if (jumpCount <= 0)
+        //        isJump = false;
+
+        //}
+        
     }
 
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag=="Floor")
+        if (collision.gameObject.tag == "Floor")
+        {
             isJump = false;
+            animator.SetBool("IsJump", false);
+
+        }
+
 
         if (collision.gameObject.tag == "Enemy")
         {
