@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     private float jumpPower;
     private bool isJump;
 
+    public int coin; 
+    public int point; 
+
     private Vector2 movement;
 
     private Animator animator;
@@ -193,19 +196,19 @@ public class PlayerController : MonoBehaviour
 
             if (coinB)
             {
-                gameController.stagePoint += 50;
-                print("코인 먹음!");
+                coin++;
+                point += 50;
                 collision.gameObject.SetActive(false);
             }
             else if (coinS)
             {
-                gameController.stagePoint += 100;
+                point += 100;
                 //Deactive Item
                 collision.gameObject.SetActive(false);
             }
             else if (coinG)
             {
-                gameController.stagePoint += 300;
+                point += 300;
                 //Deactive Item
                 collision.gameObject.SetActive(false);
             }
@@ -229,15 +232,16 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.gameObject.tag == "Point")
         {
+            print("터치다운");
             //NextStage
-            gameController.NextStage();
+            //gameController.NextStage();
         }
     }
 
     void OnAttack(Transform enemy)
     {
         //Point
-        gameController.stagePoint += 100;
+        point += 100;
 
         //Reaction Force
         rigid.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
@@ -290,7 +294,6 @@ public class PlayerController : MonoBehaviour
 
         //Die Effect Jump
         rigid.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
-
     }
 
     public void VelocityZero()

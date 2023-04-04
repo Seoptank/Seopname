@@ -8,22 +8,45 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
     public int totalPoint;
-    public int stagePoint;
     public int stageIndex;
     public int hp;
+    public int coin;
+    public int point;
+
     public static int maxHp = 3;
 
     public  PlayerController player;
     public GameObject[] stage;
+
 
     public Image[] hpUI;
     public Text pointUI;
     public Text stageUI;
     public GameObject restartBtn;
 
+    //정보창UI
+    [Header("정보창UI")]
+    public Text infoStateUI;
+    [SerializeField]
+    public Text infoStageUI;
+    public Text infoStagePointUI;
+    public Text infoCoinUI;
+
+
     void Update()
     {
-        pointUI.text = (totalPoint + stagePoint).ToString();
+        //플레이어 coin값을 계속 받아옴
+        coin = player.coin;
+        point = player.point;
+
+        pointUI.text = point.ToString();
+
+
+        // 정보창UI
+        infoStageUI.text = "Stage " + (stageIndex + 1).ToString();
+        infoStagePointUI.text = "Stage Point : " + point.ToString();
+        infoCoinUI.text = "Stage Coin : " + coin.ToString();
+
        
         //hpUI 상태
         if (hp == 0)
@@ -51,39 +74,41 @@ public class GameController : MonoBehaviour
             hpUI[2].color = new Color(1, 1, 1, 1);
         }
 
+       
+
+
     }
 
-    public void NextStage()
-    {
-        //Change Stage
-        if (stageIndex < stage.Length-1)
-        {
-            stage[stageIndex].SetActive(false);
-            stageIndex++;
-            stage[stageIndex].SetActive(true);
-            PlayerReposition();
+    //public void NextStage()
+    //{
+    //    //Change Stage
+    //    if (stageIndex < stage.Length-1)
+    //    {
+    //        stage[stageIndex].SetActive(false);
+    //        stageIndex++;
+    //        stage[stageIndex].SetActive(true);
+    //        PlayerReposition();
 
-            stageUI.text = "STAGE " + (stageIndex + 1);
-        }
-        else
-        {
-            //Game Clear
+    //        stageUI.text = "STAGE " + (stageIndex + 1);
+    //    }
+    //    else
+    //    {
+    //        //Game Clear
 
-            //Player Control Lock
-            Time.timeScale = 0;
+    //        //Player Control Lock
+    //        Time.timeScale = 0;
 
-            //ReStart Button UI
-            Text btnText = restartBtn.GetComponentInChildren<Text>();
-            btnText.text = "Clear!";
-            restartBtn.SetActive(true);
-            ViewBtn();
+    //        //ReStart Button UI
+    //        Text btnText = restartBtn.GetComponentInChildren<Text>();
+    //        btnText.text = "Clear!";
+    //        restartBtn.SetActive(true);
+    //        ViewBtn();
 
-        }
+    //    }
 
-        //Calaulartion Point
-        totalPoint += stagePoint;
-        stagePoint = 0;
-    }
+    //    //Calaulartion Point
+    //    point = 0;
+    //}
 
     public void HpDown()
     {
@@ -124,6 +149,21 @@ public class GameController : MonoBehaviour
                 collision.gameObject.SetActive(true);
             }
         }
+
+        if (collision.gameObject.tag == "Item")
+        {
+            bool coinB = collision.gameObject.name.Contains("CoinB");
+
+            if (coinB)
+            {
+                print(coin);
+            }
+        }
+
+        if(collision.gameObject.tag == "Point")
+        {
+            print("터치다운!!");
+        }
     }
 
     void PlayerReposition()
@@ -141,5 +181,11 @@ public class GameController : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene(0);
     }
+
+    public void InfoUIStart()
+    {
+
+    }
+
 
 }
