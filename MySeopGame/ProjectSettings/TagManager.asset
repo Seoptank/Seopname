@@ -9,6 +9,7 @@ TagManager:
   - Item
   - Point
   - Start
+  - UnJumpZone
   layers:
   - Default
   - TransparentFX

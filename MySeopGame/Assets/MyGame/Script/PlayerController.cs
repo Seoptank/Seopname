@@ -13,10 +13,21 @@ public class PlayerController : MonoBehaviour
     private float speed;
     private float maxSpeed;
     private float jumpPower;
+    
     private bool isJump;
+    public bool haveBanana;
 
-    public int coin; 
-    public int point; 
+    //바나나 인수 관련
+    public int banana;
+    public int maxBanana;
+    public int minBanana;
+    public int bananaAtt = 1;
+
+    //바나나프리팹 관련
+    //★차후 Start()에 값 초기화한 후 private로 변경
+    public int bananaSpeedRo;
+    public int bananaSpeed;
+    public GameObject bananaPrefab;
 
     private Vector2 movement;
 
@@ -24,7 +35,6 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer playerRenderer;
     private Rigidbody2D rigid;
     private CapsuleCollider2D capsul;
-    public GameObject fxPrefab;
 
 
     private void Awake()
@@ -46,13 +56,21 @@ public class PlayerController : MonoBehaviour
         maxSpeed = 3.0f;
         jumpPower = 13.0f;
 
+        banana = 0;
+        maxBanana = 6;
+        minBanana = 0;
+
         isJump = false;
+        haveBanana = false;
     }
 
     private void Update()
     {
         PlayerMove();
         Jump();
+
+        if (banana <= minBanana)
+            banana = minBanana;
 
         if (rigid.velocity.y < 0)
         {
@@ -71,6 +89,13 @@ public class PlayerController : MonoBehaviour
                     animator.SetBool("IsJump", false);
                 }
             }
+        }
+
+        //바나나 발사
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+             
+           
         }
     }
 
@@ -130,32 +155,6 @@ public class PlayerController : MonoBehaviour
             else
                 return;
         }
-
-        //if (!isJump)
-        //{
-        //    isJump = true;
-
-        //    if (jumpCount > 0)
-        //    {
-        //        if (Input.GetKeyDown(KeyCode.UpArrow))
-        //        {
-        //            rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-        //            animator.SetBool("IsJump", true);
-        //            jumpCount--;
-
-        //            //if (jumpCount == 1 && Input.GetKeyDown(KeyCode.UpArrow))
-        //            //{
-        //            //    jumpCount--;
-        //            //    rigid.AddForce(new Vector3(0, 1 * jumpPower, 0), ForceMode2D.Impulse);
-        //            //    animator.SetBool("DubleJump", true);
-        //            //}
-        //        }
-        //    }
-        //    else if (jumpCount <= 0)
-        //        isJump = false;
-
-        //}
-        
     }
 
 
@@ -187,61 +186,55 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Item")
         {
+            collision.gameObject.SetActive(false);
             //Point
             //＃ Contains: 대상 문자열에 비교문이 있으면 true
             bool coinB = collision.gameObject.name.Contains("CoinB");
             bool coinS = collision.gameObject.name.Contains("CoinS");
             bool coinG = collision.gameObject.name.Contains("CoinG");
-            bool apple = collision.gameObject.name.Contains("Apple");
+            bool temAppleI = collision.gameObject.name.Contains("Apple");
+            bool temBanana = collision.gameObject.name.Contains("Banana");
 
             if (coinB)
             {
-                coin++;
-                point += 50;
-                collision.gameObject.SetActive(false);
+                gameController.coin++;
+                gameController.point += 50;
             }
-            else if (coinS)
-            {
-                point += 100;
-                //Deactive Item
-                collision.gameObject.SetActive(false);
-            }
-            else if (coinG)
-            {
-                point += 300;
-                //Deactive Item
-                collision.gameObject.SetActive(false);
-            }
-            else if (apple)
+            
+            if (temAppleI)
             {
                 if(gameController.hp<3)
                 {
                     gameController.hp ++;
-                    collision.gameObject.SetActive(false);
+                    
                 }
                 else if (gameController.hp >= 3)
                 {
                     gameController.hp = 3;
                     collision.gameObject.SetActive(true);
-                    print("먹을 수 없음");
                 }
 
             }
 
+            if (temBanana)
+            {
+                haveBanana = true;
+                banana = maxBanana;
+            }
+
            
         }
-        else if (collision.gameObject.tag == "Point")
+        if (collision.gameObject.tag == "Point")
         {
-            print("터치다운");
-            //NextStage
-            //gameController.NextStage();
+            gameController.VictoryUIStart();
+           
         }
     }
 
     void OnAttack(Transform enemy)
     {
         //Point
-        point += 100;
+        gameController.point += 100;
 
         //Reaction Force
         rigid.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
@@ -294,13 +287,13 @@ public class PlayerController : MonoBehaviour
 
         //Die Effect Jump
         rigid.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
-    }
 
+        gameController.LoseUIStart();
+
+    }
     public void VelocityZero()
     {
         rigid.velocity = Vector2.zero;
     }
-
-
 
 }

@@ -7,47 +7,46 @@ using UnityEngine.SceneManagement;
 //** 점수, 스테이지 관리
 public class GameController : MonoBehaviour
 {
-    public int totalPoint;
     public int stageIndex;
     public int hp;
     public int coin;
     public int point;
 
+    private bool stageChangeState;
+
     public static int maxHp = 3;
 
     public  PlayerController player;
     public GameObject[] stage;
-
-
+    
     public Image[] hpUI;
     public Text pointUI;
     public Text stageUI;
-    public GameObject restartBtn;
+    public GameObject endUI;
 
     //정보창UI
     [Header("정보창UI")]
     public Text infoStateUI;
     [SerializeField]
-    public Text infoStageUI;
     public Text infoStagePointUI;
     public Text infoCoinUI;
 
+    public GameObject retryBtn;
+    public GameObject nextBtn;
+    public GameObject mainBtn;
+
+    private void Start()
+    {
+        stageChangeState = false;
+        endUI.SetActive(false);
+    }
 
     void Update()
     {
-        //플레이어 coin값을 계속 받아옴
-        coin = player.coin;
-        point = player.point;
+       
 
         pointUI.text = point.ToString();
 
-
-        // 정보창UI
-        infoStageUI.text = "Stage " + (stageIndex + 1).ToString();
-        infoStagePointUI.text = "Stage Point : " + point.ToString();
-        infoCoinUI.text = "Stage Coin : " + coin.ToString();
-
-       
         //hpUI 상태
         if (hp == 0)
         {
@@ -74,43 +73,33 @@ public class GameController : MonoBehaviour
             hpUI[2].color = new Color(1, 1, 1, 1);
         }
 
-       
+        //스테이지 변환시 
 
 
     }
 
-    //public void NextStage()
+    //public void endbutton()
     //{
-    //    //Change Stage
-    //    if (stageIndex < stage.Length-1)
-    //    {
-    //        stage[stageIndex].SetActive(false);
-    //        stageIndex++;
-    //        stage[stageIndex].SetActive(true);
-    //        PlayerReposition();
+    //    //change stage
+        
 
-    //        stageUI.text = "STAGE " + (stageIndex + 1);
-    //    }
-    //    else
-    //    {
-    //        //Game Clear
+//    else
+//    {
+//        //game clear
 
-    //        //Player Control Lock
-    //        Time.timeScale = 0;
+//        //player control lock
+//        Time.timeScale = 0;
 
-    //        //ReStart Button UI
-    //        Text btnText = restartBtn.GetComponentInChildren<Text>();
-    //        btnText.text = "Clear!";
-    //        restartBtn.SetActive(true);
-    //        ViewBtn();
+//        //restart button ui
 
-    //    }
 
-    //    //Calaulartion Point
-    //    point = 0;
-    //}
+//    }
 
-    public void HpDown()
+//    //calaulartion point
+//    point = 0;
+//}
+
+public void HpDown()
     {
         if (hp > 1)
             hp--;
@@ -120,7 +109,7 @@ public class GameController : MonoBehaviour
             player.OnDie();
 
             //Retry Button UI
-            ViewBtn();
+            //ViewBtn();
         }
         
     }
@@ -149,21 +138,6 @@ public class GameController : MonoBehaviour
                 collision.gameObject.SetActive(true);
             }
         }
-
-        if (collision.gameObject.tag == "Item")
-        {
-            bool coinB = collision.gameObject.name.Contains("CoinB");
-
-            if (coinB)
-            {
-                print(coin);
-            }
-        }
-
-        if(collision.gameObject.tag == "Point")
-        {
-            print("터치다운!!");
-        }
     }
 
     void PlayerReposition()
@@ -171,21 +145,84 @@ public class GameController : MonoBehaviour
         player.transform.position = new Vector3(0, 0, 0);//Player Start Position
         player.VelocityZero();
     }
-    void ViewBtn()
+    
+    
+    //**버튼
+    //----------------------------------------------------------------------------
+    public void RetryButton()
     {
-        restartBtn.SetActive(true);
-    }
-
-    public void Restart()
-    {
+        //스테이지 원위치로 이동
         Time.timeScale = 1;
         SceneManager.LoadScene(0);
-    }
 
-    public void InfoUIStart()
+        //포인트 초기화
+        point = 0;
+        endUI.SetActive(false);
+
+    }
+    public void NextButton()
     {
+        //다음 스테이지 원위치로 이동
+        if (stageIndex < stage.Length - 1)
+        {
+            stage[stageIndex].SetActive(false);
+            stageIndex++;
+            stage[stageIndex].SetActive(true);
+            PlayerReposition();
+
+            stageUI.text = "stage " + (stageIndex + 1);
+            point = 0;
+            hp = maxHp;
+            coin = 0;
+            print("ㅅㅂ");
+            endUI.SetActive(false);
+        }
+
 
     }
+    public void MainButton()
+    {
+        //버튼 보이게
+        mainBtn.SetActive(true);
+
+        
+
+        //메인으로 이동
+
+    }
+    //------------------------------------------------------------------------------
+
+    //InfoUI띄우기
+    //------------------------------------------------------------------------------
+    public void LoseUIStart()
+    {
+        //UI띄우기
+        endUI.gameObject.SetActive(true);
+
+        //정보UI
+        infoStateUI.text = "Failuer";
+        infoStagePointUI.text = "Stage Point : " + point.ToString();
+        infoCoinUI.text = "Stage Coin : " + coin.ToString();
+        retryBtn.SetActive(true);
+    }
+
+    //승리시 InfoUI띄우는 함수
+    public void VictoryUIStart()
+    {
+        //UI띄우기
+        endUI.gameObject.SetActive(true);
+
+        //정보UI
+        infoStateUI.text = "Success";
+        infoStagePointUI.text = "Stage Point : " + point.ToString();
+        infoCoinUI.text = "Stage Coin : " + coin.ToString();
+        nextBtn.SetActive(true);
+    }
+    //------------------------------------------------------------------------------
+
+   
+
+
 
 
 }
