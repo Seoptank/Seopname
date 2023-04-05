@@ -17,17 +17,7 @@ public class PlayerController : MonoBehaviour
     private bool isJump;
     public bool haveBanana;
 
-    //바나나 인수 관련
-    public int banana;
-    public int maxBanana;
-    public int minBanana;
-    public int bananaAtt = 1;
-
-    //바나나프리팹 관련
-    //★차후 Start()에 값 초기화한 후 private로 변경
-    public int bananaSpeedRo;
-    public int bananaSpeed;
-    public GameObject bananaPrefab;
+    
 
     private Vector2 movement;
 
@@ -35,6 +25,10 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer playerRenderer;
     private Rigidbody2D rigid;
     private CapsuleCollider2D capsul;
+
+    // Bullet 오브젝트, 놓는 지점
+    public GameObject bullet;
+    public Transform pos;
 
 
     private void Awake()
@@ -56,9 +50,7 @@ public class PlayerController : MonoBehaviour
         maxSpeed = 3.0f;
         jumpPower = 13.0f;
 
-        banana = 0;
-        maxBanana = 6;
-        minBanana = 0;
+        
 
         isJump = false;
         haveBanana = false;
@@ -69,9 +61,7 @@ public class PlayerController : MonoBehaviour
         PlayerMove();
         Jump();
 
-        if (banana <= minBanana)
-            banana = minBanana;
-
+       
         if (rigid.velocity.y < 0)
         {
             //** Jump Ray디버그
@@ -91,11 +81,10 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        //바나나 발사
+        //Bullet 발사
         if (Input.GetKeyUp(KeyCode.Space))
         {
-             
-           
+            Instantiate(bullet, pos.position, transform.rotation);
         }
     }
 
@@ -114,31 +103,40 @@ public class PlayerController : MonoBehaviour
 
     void PlayerMove()
     {
+        float hor = Input.GetAxisRaw("Horizontal");
+
+        transform.Translate(new Vector3(Mathf.Abs(hor) * speed * Time.deltaTime, 0, 0));
+        if (hor > 0)
+        {
+            transform.eulerAngles = new Vector3(0, 0, 0);
+            animator.SetBool("IsWalk", true);
+        }
+        else if (hor < 0)
+        {
+            transform.eulerAngles = new Vector3(0, 180, 0);
+            animator.SetBool("IsWalk", true);
+        }
+        else if (hor == 0)
+            animator.SetBool("IsWalk", false);
+
         //** 플레이어 좌우이동
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            rigid.AddForce(new Vector2(speed, 0.0f), ForceMode2D.Force);
-            playerRenderer.flipX = false;
-            animator.SetBool("IsWalk", true);
-        }
-        else if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            rigid.AddForce(new Vector2((-1.0f) *speed, 0.0f), ForceMode2D.Force);
-            playerRenderer.flipX = true;
-            animator.SetBool("IsWalk", true);
-        }
-        
-        //** "IsWalk"Ani 멈춤
-        if(Mathf.Abs(rigid.velocity.x) < 1.0f)
-                animator.SetBool("IsWalk", false);
+        //if (Input.GetKey(KeyCode.RightArrow))
+        //{
+        //    rigid.AddForce(new Vector2(speed, 0.0f), ForceMode2D.Force);
+        //}
+        //else if (Input.GetKey(KeyCode.LeftArrow))
+        //{
+        //    rigid.AddForce(new Vector2((-1.0f) *speed, 0.0f), ForceMode2D.Force);
+        //}
+
         
         //** 멈출때 속도
-        if (Input.GetButtonUp("Horizontal"))
-        {
-            rigid.velocity = new Vector2(
-                rigid.velocity.normalized.x * 0.5f,
-                rigid.velocity.y);
-        }
+        //if (Input.GetButtonUp("Horizontal"))
+        //{
+        //    rigid.velocity = new Vector2(
+        //        rigid.velocity.normalized.x * 0.5f,
+        //        rigid.velocity.y);
+        //}
     }
 
     void Jump()
@@ -193,7 +191,6 @@ public class PlayerController : MonoBehaviour
             bool coinS = collision.gameObject.name.Contains("CoinS");
             bool coinG = collision.gameObject.name.Contains("CoinG");
             bool temAppleI = collision.gameObject.name.Contains("Apple");
-            bool temBanana = collision.gameObject.name.Contains("Banana");
 
             if (coinB)
             {
@@ -215,15 +212,8 @@ public class PlayerController : MonoBehaviour
                 }
 
             }
-
-            if (temBanana)
-            {
-                haveBanana = true;
-                banana = maxBanana;
-            }
-
-           
         }
+
         if (collision.gameObject.tag == "Point")
         {
             gameController.VictoryUIStart();
