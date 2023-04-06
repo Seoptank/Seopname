@@ -12,8 +12,6 @@ public class GameController : MonoBehaviour
     public int coin;
     public int point;
 
-    private bool stageChangeState;
-
     public static int maxHp = 3;
 
     public  PlayerController player;
@@ -22,6 +20,7 @@ public class GameController : MonoBehaviour
     public Image[] hpUI;
     public Text pointUI;
     public Text stageUI;
+    public Text clipUI;
     public GameObject endUI;
 
     //정보창UI
@@ -37,13 +36,12 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        stageChangeState = false;
         endUI.SetActive(false);
     }
 
     void Update()
     {
-       
+        clipUI.text = "x" + player.bulletClip;
 
         pointUI.text = point.ToString();
 
@@ -174,7 +172,7 @@ public void HpDown()
             point = 0;
             hp = maxHp;
             coin = 0;
-            print("ㅅㅂ");
+            player.bulletClip = 10;
             endUI.SetActive(false);
         }
 
@@ -182,13 +180,8 @@ public void HpDown()
     }
     public void MainButton()
     {
-        //버튼 보이게
-        mainBtn.SetActive(true);
-
-        
-
         //메인으로 이동
-
+        SceneManager.LoadScene("GameStart");
     }
     //------------------------------------------------------------------------------
 

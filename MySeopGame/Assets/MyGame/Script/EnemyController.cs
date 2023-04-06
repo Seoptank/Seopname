@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -8,6 +6,10 @@ public class EnemyController : MonoBehaviour
     private Animator ani;
     private SpriteRenderer renderer;
     private BoxCollider2D boxCollider;
+
+    public GameObject bullet;
+    public BulletController bulletCtrl;
+
 
     public int nextMove;
 
@@ -26,9 +28,9 @@ public class EnemyController : MonoBehaviour
         //** 이동
         rigid.velocity = new Vector2(nextMove, rigid.velocity.y);
 
-        
+
         //** Platform끝 확인
-        Vector2 frontVec = new Vector2(rigid.position.x + nextMove * 0.5f , rigid.position.y);// 방향
+        Vector2 frontVec = new Vector2(rigid.position.x + nextMove * 0.5f, rigid.position.y);// 방향
         Debug.DrawRay(frontVec, Vector3.down, new Color(0, 1, 0));
         RaycastHit2D rayHit = Physics2D.Raycast(frontVec, Vector3.down, 1, LayerMask.GetMask("Platform"));
         if (rayHit.collider == null)
@@ -45,15 +47,15 @@ public class EnemyController : MonoBehaviour
 
     }
 
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Bullet")
+        if (collision.gameObject.tag == "Bullet")
         {
-            print("피격");
+            print("맞음");
             OnDamaged();
         }
     }
+
 
     void Think()
     {
@@ -63,9 +65,9 @@ public class EnemyController : MonoBehaviour
 
         //** 애니메이션 재생
         if (nextMove == 0)
-            ani.SetBool("IsWalk",false);
+            ani.SetBool("IsWalk", false);
         else
-            ani.SetBool("IsWalk",true);
+            ani.SetBool("IsWalk", true);
 
         Invoke("Think", 3); //**재귀함수
     }
@@ -93,6 +95,6 @@ public class EnemyController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-   
+
 
 }

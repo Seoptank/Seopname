@@ -9,14 +9,6 @@ public class BulletController : MonoBehaviour
 
     public GameObject effect;
     public Transform effectPos;
-
-    
-
-    void Start()
-    {
-        
-    }
-
     private void Update()
     {
         if (transform.rotation.y == 0)
@@ -27,17 +19,11 @@ public class BulletController : MonoBehaviour
         RaycastHit2D ray = Physics2D.Raycast(transform.position, transform.right, distance, isLayer);
         if (ray.collider != null)
         {
-            if (ray.collider.tag == "Enemy")
+            if (ray.collider.tag == "Floor")
             {
                 DestroyBullet();
                 Instantiate(effect, effectPos.position, transform.rotation);
-                Invoke("DestroyEffect", 0.5f);
-            }
 
-            if(ray.collider.tag == "Floor")
-            {
-                DestroyBullet();
-                Instantiate(effect, effectPos.position, transform.rotation);
             }
         }
 
@@ -48,11 +34,13 @@ public class BulletController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void DestroyEffect()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        Destroy(effect.gameObject);
+        if (collision.gameObject.tag == "Enemy")
+        {
+            DestroyBullet();
+            Instantiate(effect, effectPos.position, transform.rotation);
+        }
     }
-
-
 }
 

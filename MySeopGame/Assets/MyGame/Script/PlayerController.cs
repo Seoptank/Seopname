@@ -50,8 +50,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        speed = 4.0f;
-        maxSpeed = 4.0f;
+        speed = 5.0f;
+        maxSpeed = 5.0f;
         jumpPower = 13.0f;
 
         bulletClip = maxBulletClip;
