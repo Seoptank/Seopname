@@ -2,31 +2,19 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
-    // public GameObject enemy;
 
     public float speed;
     public float distance;
     public LayerMask isLayer;
 
-    private Animator ani; 
+    public GameObject effect;
+    public Transform effectPos;
 
-    private int bullet;
-    private int maxBullet;
-    private int minBullet;
-
-    void Awake()
-    {
-        ani = GetComponent<Animator>();   
-    }
+    
 
     void Start()
     {
-        maxBullet = 0;
-        maxBullet = 20;
-        minBullet = 0;
-        //this.enemy = GameObject.Find("Enemy");
-
-
+        
     }
 
     private void Update()
@@ -42,14 +30,27 @@ public class BulletController : MonoBehaviour
             if (ray.collider.tag == "Enemy")
             {
                 DestroyBullet();
-                print("ИэСп!");
+                Instantiate(effect, effectPos.position, transform.rotation);
+                Invoke("DestroyEffect", 0.5f);
+            }
+
+            if(ray.collider.tag == "Floor")
+            {
+                DestroyBullet();
+                Instantiate(effect, effectPos.position, transform.rotation);
             }
         }
+
 
     }
     void DestroyBullet()
     {
         Destroy(gameObject);
+    }
+
+    void DestroyEffect()
+    {
+        Destroy(effect.gameObject);
     }
 
 

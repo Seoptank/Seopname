@@ -45,6 +45,16 @@ public class EnemyController : MonoBehaviour
 
     }
 
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "Bullet")
+        {
+            print("피격");
+            OnDamaged();
+        }
+    }
+
     void Think()
     {
         //** 다음 활동 설정
@@ -83,12 +93,6 @@ public class EnemyController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Bullet")
-        {
-            OnDamaged();
-        }
-    }
+   
 
 }

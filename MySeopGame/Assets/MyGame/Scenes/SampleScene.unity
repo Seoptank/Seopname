@@ -23009,6 +23009,10 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2843238456148439019, guid: 4c81a244f4bc9f943aa0aebdeea5dabe, type: 3}
+      propertyPath: maxBulletClip
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2843238456148439019, guid: 4c81a244f4bc9f943aa0aebdeea5dabe, type: 3}
       propertyPath: gameController
       value: 
       objectReference: {fileID: 149484559}

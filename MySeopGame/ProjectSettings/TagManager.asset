@@ -11,6 +11,7 @@ TagManager:
   - Start
   - UnJumpZone
   - Bullet
+  - Effect
   layers:
   - Default
   - TransparentFX
@@ -62,4 +63,7 @@ TagManager:
     locked: 0
   - name: Bullet
     uniqueID: 1160154569
+    locked: 0
+  - name: Effect
+    uniqueID: 2497251705
     locked: 0

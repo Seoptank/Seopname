@@ -30,6 +30,10 @@ public class PlayerController : MonoBehaviour
     public GameObject bullet;
     public Transform pos;
 
+    public int bulletClip;
+    public int maxBulletClip=10;
+    public int minBulletClip=0;
+
 
     private void Awake()
     {
@@ -46,11 +50,11 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        speed = 3.0f;
-        maxSpeed = 3.0f;
+        speed = 4.0f;
+        maxSpeed = 4.0f;
         jumpPower = 13.0f;
 
-        
+        bulletClip = maxBulletClip;
 
         isJump = false;
         haveBanana = false;
@@ -84,7 +88,19 @@ public class PlayerController : MonoBehaviour
         //Bullet ¹ß»ç
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            Instantiate(bullet, pos.position, transform.rotation);
+            if(bulletClip > minBulletClip)
+            {
+                bulletClip--;
+                Instantiate(bullet, pos.position, transform.rotation);
+                bullet.gameObject.SetActive(true);
+            }
+            
+            if (bulletClip<= minBulletClip)
+            {
+                print("Åº¾à ´Ù¾¸");
+                bulletClip = minBulletClip;
+                bullet.gameObject.SetActive(false);
+            }
         }
     }
 
