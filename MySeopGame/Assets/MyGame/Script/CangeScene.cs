@@ -9,6 +9,12 @@ public class CangeScene : MonoBehaviour
     {
         SceneManager.LoadScene("MainGame");
     }
+
+    public void Loading()
+    {
+        SceneManager.LoadScene("ProgressBar");
+    }
+
     public void ExitGame()
     {
         Application.Quit();

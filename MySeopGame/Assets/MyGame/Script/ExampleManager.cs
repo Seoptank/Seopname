@@ -1,17 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 
+[System.Serializable]
 public class MemberForm
 {
-    public string Name;
-    public int Age;
+    public int index;
+    public string name;
+    public int age;
+    public int gender;
 
-    public MemberForm(string name, int age)
+   
+    public MemberForm(int index, string name, int age, int gender)
     {
-        this.Name = name;
-        this.Age = age;
+        this.index = index;
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
     }
 }
 
@@ -25,12 +32,12 @@ public class ExampleManager : MonoBehaviour
     IEnumerator Start()
     {
         //** 요청을 하기위한 작엄
-        MemberForm member = new MemberForm("변사또", 45);
+        //MemberForm member = new MemberForm();
 
-        WWWForm form = new WWWForm();
+        //WWWForm form = new WWWForm();
 
-        form.AddField("Name", member.Name);
-        form.AddField("Age", member.Age);
+        //form.AddField("Name", member.name);
+        //form.AddField("Age", member.age);
 
         //MemberForm
         //string userName="변사또";
@@ -38,15 +45,25 @@ public class ExampleManager : MonoBehaviour
 
 
         //UnityWebRequest request = UnityWebRequest.Get(URL);
-        using (UnityWebRequest request = UnityWebRequest.Post(URL, form))
+        using (UnityWebRequest request = UnityWebRequest.Get(URL))
         {
 
             yield return request.SendWebRequest();
 
+            MemberForm json = JsonUtility.FromJson<MemberForm>(request.downloadHandler.text);
 
             //** 응답에 대한 작업
-            print(request.downloadHandler.text);
+            print(json.index);
+            print(json.name);
+            print(json.age);
+            print(json.gender);
             //print(request.error);
         }
     }
+
+    public void NextSene()
+    {
+        SceneManager.LoadScene("progressScene");
+    }
+
 }

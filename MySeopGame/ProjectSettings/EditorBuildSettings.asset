@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/MyGame/Scenes/LogIn.unity
+    guid: ef250c7741f6a59469ae7283371ce189
+  - enabled: 1
+    path: Assets/MyGame/Scenes/ProgressBar.unity
+    guid: ae43ffbf4f08a274e906b2bf64d2c2f4
+  - enabled: 1
     path: Assets/MyGame/Scenes/GameStart.unity
     guid: d98096e78e7429f43b3f3b778e62294c
   - enabled: 1
