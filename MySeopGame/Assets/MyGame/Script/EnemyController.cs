@@ -50,10 +50,9 @@ public class EnemyController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Bullet")
-        {
-            print("¸ÂÀ½");
             OnDamaged();
-        }
+        if (collision.gameObject.tag == "Effect")
+            OnDamaged();
     }
 
 

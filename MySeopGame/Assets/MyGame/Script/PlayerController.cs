@@ -10,14 +10,8 @@ public class PlayerController : MonoBehaviour
 {
     public GameController gameController;
 
-    private float speed;
+    public float speed;
     private float maxSpeed;
-    private float jumpPower;
-    
-    private bool isJump;
-    public bool haveBanana;
-
-    
 
     private Vector2 movement;
 
@@ -28,11 +22,18 @@ public class PlayerController : MonoBehaviour
 
     // Bullet 오브젝트, 놓는 지점
     public GameObject bullet;
+    public GameObject boomb;
     public Transform pos;
 
     public int bulletClip;
     public int maxBulletClip=10;
     public int minBulletClip=0;
+
+    //** 점프를 위한 변수 
+    private Vector2 boxCastSize = new Vector2(0.4f, 0.05f);
+    private float boxCastMaxDistance = 0.7f;
+    private float jumpPower;
+
 
 
     private void Awake()
@@ -52,20 +53,21 @@ public class PlayerController : MonoBehaviour
     {
         speed = 5.0f;
         maxSpeed = 5.0f;
-        jumpPower = 13.0f;
+        jumpPower = 15.0f;
 
         bulletClip = maxBulletClip;
-
-        isJump = false;
-        haveBanana = false;
     }
 
     private void Update()
     {
         PlayerMove();
-        Jump();
 
-       
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            Jump();
+        }
+
+
         if (rigid.velocity.y < 0)
         {
             //** Jump Ray디버그
@@ -77,7 +79,7 @@ public class PlayerController : MonoBehaviour
             //** Ray맞으면 
             if (rayHit.collider != null)
             {
-                if (rayHit.distance < 1.5f)
+                if (rayHit.distance < 0.5f)
                 {
                     //** "IsJump" false
                     animator.SetBool("IsJump", false);
@@ -101,6 +103,12 @@ public class PlayerController : MonoBehaviour
                 bulletClip = minBulletClip;
                 bullet.gameObject.SetActive(false);
             }
+        }
+
+        //** Boomb놓기 
+        if (Input.GetKeyUp(KeyCode.LeftControl))
+        {
+            Instantiate(boomb, pos.position, transform.rotation);
         }
     }
 
@@ -135,52 +143,13 @@ public class PlayerController : MonoBehaviour
         else if (hor == 0)
             animator.SetBool("IsWalk", false);
 
-        //** 플레이어 좌우이동
-        //if (Input.GetKey(KeyCode.RightArrow))
-        //{
-        //    rigid.AddForce(new Vector2(speed, 0.0f), ForceMode2D.Force);
-        //}
-        //else if (Input.GetKey(KeyCode.LeftArrow))
-        //{
-        //    rigid.AddForce(new Vector2((-1.0f) *speed, 0.0f), ForceMode2D.Force);
-        //}
-
-        
-        //** 멈출때 속도
-        //if (Input.GetButtonUp("Horizontal"))
-        //{
-        //    rigid.velocity = new Vector2(
-        //        rigid.velocity.normalized.x * 0.5f,
-        //        rigid.velocity.y);
-        //}
     }
 
-    void Jump()
-    {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-
-            if (isJump == false)
-            {
-                animator.SetBool("IsJump", true);
-                isJump = true;
-                rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-            }
-            else
-                return;
-        }
-    }
+    
 
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Floor")
-        {
-            isJump = false;
-            animator.SetBool("IsJump", false);
-
-        }
-
 
         if (collision.gameObject.tag == "Enemy")
         {
@@ -301,5 +270,38 @@ public class PlayerController : MonoBehaviour
     {
         rigid.velocity = Vector2.zero;
     }
+
+    //** 점프를 위한 함수들
+    private bool IsOnGround()
+    {
+        RaycastHit2D raycastHit = Physics2D.BoxCast(transform.position, boxCastSize, 0f, Vector2.down, boxCastMaxDistance, LayerMask.GetMask("Platform"));
+        return (raycastHit.collider != null);
+    }
+
+    public void Jump()
+    {
+        if (IsOnGround())
+        {
+            this.GetComponent<Rigidbody2D>().AddForce(Vector2.up * jumpPower,ForceMode2D.Impulse);
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        RaycastHit2D raycastHit = Physics2D.BoxCast(transform.position, boxCastSize, 0f, Vector2.down, boxCastMaxDistance, LayerMask.GetMask("Platform"));
+
+        Gizmos.color = Color.red;
+
+        if (raycastHit.collider != null)
+        {
+            Gizmos.DrawRay(transform.position, Vector2.down * raycastHit.distance);
+            Gizmos.DrawWireCube(transform.position + Vector3.down * raycastHit.distance, boxCastSize);
+        }
+        else
+        {
+            Gizmos.DrawRay(transform.position, Vector2.down * boxCastMaxDistance);
+        }
+    }
+    
 
 }
