@@ -377,6 +377,7 @@
 "Assets/MyGame/Script/PrograssBar.cs"
 "Assets/MyGame/Script/Register.cs"
 "Assets/MyGame/Script/SpotController.cs"
+"Assets/MyGame/Script/TrapController.cs"
 "Assets/Simple 2D Platformer BE2/ReadMe/Scripts/ReadmeBE2.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/Benchmark01.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/Benchmark01_UGUI.cs"

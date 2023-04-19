@@ -17,8 +17,6 @@ public class BoombBulletController : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody2D>();
         Invoke("DestroyBoomb", 3);
-
-
     }
 
 

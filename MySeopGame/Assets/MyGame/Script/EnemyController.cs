@@ -8,7 +8,9 @@ public class EnemyController : MonoBehaviour
     private BoxCollider2D boxCollider;
 
     public GameObject bullet;
-    public BulletController bulletCtrl;
+    public GameController gameController;
+
+    public int point;
 
 
     public int nextMove;
@@ -50,9 +52,13 @@ public class EnemyController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Bullet")
+        {
             OnDamaged();
+        }
         if (collision.gameObject.tag == "Effect")
+        {
             OnDamaged();
+        }
     }
 
 
@@ -87,6 +93,9 @@ public class EnemyController : MonoBehaviour
 
         //Destroy
         Invoke("DeActive", 5);
+
+        gameController.point += 100;
+        
     }
 
     void DeActive()

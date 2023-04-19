@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 //** 점수, 스테이지 관리
 public class GameController : MonoBehaviour
 {
+    public EnemyController enemy;
+
     public int stageIndex;
     public int hp;
     public int coin;
@@ -44,6 +46,7 @@ public class GameController : MonoBehaviour
         clipUI.text = "x" + player.bulletClip;
 
         pointUI.text = point.ToString();
+
 
         //hpUI 상태
         if (hp == 0)
@@ -151,7 +154,7 @@ public void HpDown()
     {
         //스테이지 원위치로 이동
         Time.timeScale = 1;
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(3);
 
         //포인트 초기화
         point = 0;

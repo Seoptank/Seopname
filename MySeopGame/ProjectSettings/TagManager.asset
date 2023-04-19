@@ -12,6 +12,7 @@ TagManager:
   - UnJumpZone
   - Bullet
   - Effect
+  - Trap
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - PlayerDamaged
   - Platform
   - Bullet
-  - 
+  - Trap
   - 
   - 
   - 
@@ -69,4 +70,7 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 2233008231
+    locked: 0
+  - name: Trap
+    uniqueID: 476593693
     locked: 0

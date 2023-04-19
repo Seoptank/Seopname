@@ -34,6 +34,11 @@ public class PlayerController : MonoBehaviour
     private float boxCastMaxDistance = 0.7f;
     private float jumpPower;
 
+    //** ¿À·»Áö ÆøÅº º¯¼ö
+    private int orangeClip;
+    private int maxOrangeClip;
+    private int minOrangeClip;
+
 
 
     private void Awake()
@@ -54,6 +59,10 @@ public class PlayerController : MonoBehaviour
         speed = 5.0f;
         maxSpeed = 5.0f;
         jumpPower = 15.0f;
+
+        maxOrangeClip = 5;
+        orangeClip = 0;
+        minOrangeClip = 0;
 
         bulletClip = maxBulletClip;
     }
@@ -108,7 +117,13 @@ public class PlayerController : MonoBehaviour
         //** Boomb³õ±â 
         if (Input.GetKeyUp(KeyCode.LeftControl))
         {
+            orangeClip--;
             Instantiate(boomb, pos.position, transform.rotation);
+
+            if (orangeClip <= minOrangeClip)
+                orangeClip = minOrangeClip;
+            else if (orangeClip >= maxOrangeClip)
+                orangeClip = maxOrangeClip;
         }
     }
 
@@ -176,6 +191,7 @@ public class PlayerController : MonoBehaviour
             bool coinS = collision.gameObject.name.Contains("CoinS");
             bool coinG = collision.gameObject.name.Contains("CoinG");
             bool temAppleI = collision.gameObject.name.Contains("Apple");
+            bool temOrange = collision.gameObject.name.Contains("Orange");
 
             if (coinB)
             {
@@ -197,6 +213,13 @@ public class PlayerController : MonoBehaviour
                 }
 
             }
+
+            if (temOrange)
+            {
+                orangeClip = maxOrangeClip;
+                print(orangeClip);
+               
+            }
         }
 
         if (collision.gameObject.tag == "Point")
@@ -204,6 +227,8 @@ public class PlayerController : MonoBehaviour
             gameController.VictoryUIStart();
            
         }
+
+        
     }
 
     void OnAttack(Transform enemy)
