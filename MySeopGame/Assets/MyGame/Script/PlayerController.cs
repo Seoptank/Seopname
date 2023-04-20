@@ -117,8 +117,18 @@ public class PlayerController : MonoBehaviour
         //** Boomb놓기 
         if (Input.GetKeyUp(KeyCode.LeftControl))
         {
-            orangeClip--;
-            Instantiate(boomb, pos.position, transform.rotation);
+            
+            if(orangeClip <= minOrangeClip)
+            {
+                orangeClip = minOrangeClip;
+            }
+            else if(orangeClip>minOrangeClip || orangeClip <= maxOrangeClip)
+            {
+                orangeClip--;
+                boomb.gameObject.SetActive(true);
+                Instantiate(boomb, pos.position, transform.rotation);
+            }
+                
             
         }
     }
@@ -216,8 +226,18 @@ public class PlayerController : MonoBehaviour
 
             if (temOrange)
             {
-                orangeClip = maxOrangeClip;
-                collision.gameObject.SetActive(false);
+
+                if (orangeClip > maxOrangeClip)
+                {
+                    collision.gameObject.SetActive(true);
+                    orangeClip = maxOrangeClip;
+                    print("오랜지 만통");
+                }
+                else if (orangeClip == minBulletClip)
+                {
+                    collision.gameObject.SetActive(false);
+                    orangeClip += maxOrangeClip;
+                }
 
             }
         }

@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour
     public Text pointUI;
     public Text stageUI;
     public Text clipUI;
+    public Text orangeClipUI;
     public GameObject endUI;
 
     //Á¤º¸Ã¢UI
@@ -44,6 +45,7 @@ public class GameController : MonoBehaviour
     void Update()
     {
         clipUI.text = "x" + player.bulletClip;
+        orangeClipUI.text = "x" + player.orangeClip;
 
         pointUI.text = point.ToString();
 
