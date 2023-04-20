@@ -13,10 +13,12 @@ public class BoombBulletController : MonoBehaviour
     private Rigidbody2D rigid;
     public LayerMask isLayer;
 
+
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
         Invoke("DestroyBoomb", 3);
+        
     }
 
 

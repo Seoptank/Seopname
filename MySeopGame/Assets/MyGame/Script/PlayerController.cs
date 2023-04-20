@@ -35,9 +35,9 @@ public class PlayerController : MonoBehaviour
     private float jumpPower;
 
     //** 오렌지 폭탄 변수
-    private int orangeClip;
-    private int maxOrangeClip;
-    private int minOrangeClip;
+    public int orangeClip;
+    public int maxOrangeClip;
+    public int minOrangeClip;
 
 
 
@@ -119,11 +119,7 @@ public class PlayerController : MonoBehaviour
         {
             orangeClip--;
             Instantiate(boomb, pos.position, transform.rotation);
-
-            if (orangeClip <= minOrangeClip)
-                orangeClip = minOrangeClip;
-            else if (orangeClip >= maxOrangeClip)
-                orangeClip = maxOrangeClip;
+            
         }
     }
 
@@ -184,7 +180,6 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Item")
         {
-            collision.gameObject.SetActive(false);
             //Point
             //＃ Contains: 대상 문자열에 비교문이 있으면 true
             bool coinB = collision.gameObject.name.Contains("CoinB");
@@ -197,19 +192,24 @@ public class PlayerController : MonoBehaviour
             {
                 gameController.coin++;
                 gameController.point += 50;
+                collision.gameObject.SetActive(false);
+
             }
-            
+
             if (temAppleI)
             {
                 if(gameController.hp<3)
                 {
                     gameController.hp ++;
-                    
+                    collision.gameObject.SetActive(false);
+
+
                 }
                 else if (gameController.hp >= 3)
                 {
                     gameController.hp = 3;
                     collision.gameObject.SetActive(true);
+                    
                 }
 
             }
@@ -217,8 +217,8 @@ public class PlayerController : MonoBehaviour
             if (temOrange)
             {
                 orangeClip = maxOrangeClip;
-                print(orangeClip);
-               
+                collision.gameObject.SetActive(false);
+
             }
         }
 
