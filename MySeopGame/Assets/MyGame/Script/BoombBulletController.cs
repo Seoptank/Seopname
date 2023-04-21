@@ -14,36 +14,39 @@ public class BoombBulletController : MonoBehaviour
     private SpriteRenderer bombRenderer;
     public LayerMask isLayer;
 
-    // 색상 변경을 위한 변수's
-    private float curTime;
-    private float maxTime = 3f;
-    private float r = 255f;
-    private float g = 255f;
-    private float b = 255f;
-    private float colorCurve = -0.3f ;
+    // 색상 변경을 위한 변수
+    private float maxTime = 5.0f;
+    public Color startColor = Color.white;
+    public Color endColor = Color.red;
+    [Range(0, 10)]
+    public float colorChangespeed = 1;
+
 
     //동그라미 레이
     float maxDistance = 1.09f;
-    float mySize = 0.16f;
+    float mySize = 0.3f;
     
 
 
     private void Awake()
     {
         bombRenderer = GetComponent<SpriteRenderer>();
-    }
-
-    void Start()
-    {
         rigid = GetComponent<Rigidbody2D>();
-        
-        bombRenderer.color = new Color(r,g,b); 
     }
 
     private void Update()
     {
-        
+
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            bombRenderer.color = Color.Lerp(startColor, endColor, Mathf.PingPong(Time.time * colorChangespeed, 1));
+        }
+    }
+
 
     void DestroyBoomb()
     {
@@ -51,65 +54,24 @@ public class BoombBulletController : MonoBehaviour
         Instantiate(effect, effectPos.position, transform.rotation);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Enemy")
-        {
-            Invoke("DestroyBoomb", 3);
-
-            for(curTime = 0f; curTime <= maxTime; curTime += Time.deltaTime )
-            {
-
-            }
-
-            if (curTime >= 1)
-            {
-                g += curTime * colorCurve;
-                b += curTime * colorCurve;
-                if (g <= 120)
-                {
-                    colorCurve = -0.1f;
-                    r += (curTime * -0.08f);
-                }
-            }
-        }
-    }
-
-    void BombColorCange()
-    {
-        
-        //curTime += Time.deltaTime;
-        
-        //for (float i = 0; i <= maxTime; i += 0.5f)
-        //{
-
-        //    bombRenderer.color = new Color()
-        //}
-    }
-
-    void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         Vector3 myPosition = transform.position;
         RaycastHit2D rayHit = Physics2D.CircleCast(myPosition, mySize, Vector2.up, maxDistance, LayerMask.GetMask("Enemy"));
 
 
-        Gizmos.color = Color.red;
 
         if (rayHit.collider != null)
         {
-            print("안부딧힘");
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position + Vector3.down * rayHit.distance, mySize);
+            Invoke("DestroyBoomb", maxTime);
         }
         else
         {
-            print("부딧힘");
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position + Vector3.down * rayHit.distance, mySize);
         }
     }
-
-    private bool IsTouchEnemy()
-    {
-        Vector3 myPosition = transform.position;
-        RaycastHit2D rayHit = Physics2D.CircleCast(myPosition, mySize, Vector2.up, maxDistance, LayerMask.GetMask("Enemy"));
-        return (rayHit.collider != null);
-    }
-
 }
+
